@@ -139,16 +139,7 @@ public class Partida {
 	}
 
 	public String relatorioTabuleiro() {
-		if(proximoTile==null){
-			return tileAnterior.toString(); //quando a partida acaba
-		}
-		if(count==1){
-			return proximoTile.toString();
-		}
-		if(tilePosicionado){
-			return tileAnterior.toString()+proximoTile.toString(); //quando o tile foi posicionado 
-		}
-		return tileAnterior.toString(); //quando o tile não foi posicionado
+		return tabuleiro.toString();
 
 	}
 }
