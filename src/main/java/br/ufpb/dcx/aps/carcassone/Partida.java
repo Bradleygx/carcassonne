@@ -7,10 +7,13 @@ public class Partida {
 
 	private BolsaDeTiles tiles;
 	private Tile proximoTile;
+	private Tile tileAnterior;
 	private boolean tilePosicionado;
 	private TabuleiroFlexivel tabuleiro = new TabuleiroFlexivel("  ");
 	private String status ="Em_Andamento";
+	private String status2 ="Partida_Finalizada";
 	private String statusTurno= "Tile_Posicionado";
+	boolean partidaAcabou;
 	private Jogador[] jogadores;
 	private Jogador jogadorAtual;
 
@@ -37,10 +40,16 @@ public class Partida {
 	}
 
 	public String relatorioPartida() {
-		return "Status: " + status + "\nJogadores: " +toStringJogadores();
+		if(!partidaAcabou){
+			return "Status: " + status + "\nJogadores: " +toStringJogadores();
+		}
+		return "Status: " + status2 + "\nJogadores: " +toStringJogadores();
 	}
 
 	public String relatorioTurno() {
+		if(partidaAcabou){
+			throw new ExcecaoJogo("Partida finalizada");
+		}
 		return "Jogador: " + jogadorAtual.getCor() + "\nTile: " + proximoTile.toString() + "\nStatus: " + statusTurno;
 	}
 
@@ -50,8 +59,14 @@ public class Partida {
 	}
 
 	private void pegarProximoTile() {
+		tileAnterior=proximoTile;
 		proximoTile = tiles.pegar();
-		proximoTile.reset();
+		if(proximoTile!=null){
+			proximoTile.reset();
+		}
+		else{
+			partidaAcabou=true;
+		}
 	}
 
 	public Partida finalizarTurno() {
@@ -97,6 +112,9 @@ public class Partida {
 	}
 
 	public String relatorioTabuleiro() {
+		if(proximoTile==null){
+			return tileAnterior.toString();
+		}
 		return proximoTile.toString();
 	}
 }
