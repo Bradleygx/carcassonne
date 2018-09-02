@@ -8,6 +8,7 @@ public class Partida {
 	private BolsaDeTiles tiles;
 	private Tile proximoTile;
 	private Tile tileAnterior;
+	private String statusTabuleiro;
 	private boolean tilePosicionado;
 	private TabuleiroFlexivel tabuleiro = new TabuleiroFlexivel("  ");
 	private String status ="Em_Andamento";
@@ -20,6 +21,7 @@ public class Partida {
 
 	Partida(BolsaDeTiles tiles,Jogador[] jogadores) {
 		this.tiles = tiles;
+		this.statusTabuleiro="";
 		this.jogadores=jogadores;
 		pegarProximoTile();
 		jogadorAtual=jogadores[0];
@@ -51,6 +53,9 @@ public class Partida {
 		if(partidaAcabou){
 			throw new ExcecaoJogo("Partida finalizada");
 		}
+		if(tilePosicionado){
+			statusTurno="Tile_Posicionado";
+		}
 		return "Jogador: " + jogadorAtual.getCor() + "\nTile: " + proximoTile.toString() + "\nStatus: " + statusTurno;
 	}
 
@@ -75,9 +80,14 @@ public class Partida {
 		else{
 			partidaAcabou=true;
 		}
+		if(count==1){
+			tabuleiro.adicionarPrimeiroTile(proximoTile);
+			tilePosicionado=true;
+		}
 	}
 
 	public Partida finalizarTurno() {
+		tilePosicionado=false;
 		pegarProximoTile();
 		statusTurno="Início_Turno";
 		jogadorAtual=jogadores[(count-1)%jogadores.length];
@@ -86,6 +96,7 @@ public class Partida {
 
 	public Partida posicionarTile(Tile tileReferencia, Lado ladoTileReferencia) {
 		tabuleiro.posicionar(tileReferencia, ladoTileReferencia, proximoTile);
+		tilePosicionado=true;
 		return this;
 	}
 
@@ -123,12 +134,15 @@ public class Partida {
 
 	public String relatorioTabuleiro() {
 		if(proximoTile==null){
-			return tileAnterior.toString();
+			return tileAnterior.toString(); //quando a partida acaba
+		}
+		if(count==1){
+			return proximoTile.toString();
 		}
 		if(tilePosicionado){
-			return proximoTile.toString(); //quando o tile foi posicionado 
+			return tileAnterior.toString()+proximoTile.toString(); //quando o tile foi posicionado 
 		}
-		return tileAnterior.toString();
+		return tileAnterior.toString(); //quando o tile não foi posicionado
 
 	}
 }
