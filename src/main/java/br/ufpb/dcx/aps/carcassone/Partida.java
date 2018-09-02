@@ -60,6 +60,9 @@ public class Partida {
 	}
 
 	public Partida girarTile() {
+		if(tilePosicionado){
+			throw new ExcecaoJogo("Não pode girar tile já posicionado");
+		}
 		if(partidaAcabou){
 			throw new ExcecaoJogo("Não pode girar tiles com a partida finalizada");
 		}
@@ -95,6 +98,9 @@ public class Partida {
 	}
 
 	public Partida posicionarTile(Tile tileReferencia, Lado ladoTileReferencia) {
+		if(tilePosicionado){
+			throw new ExcecaoJogo("Não pode reposicionar tile já posicionado");
+		}
 		tabuleiro.posicionar(tileReferencia, ladoTileReferencia, proximoTile);
 		tilePosicionado=true;
 		return this;
