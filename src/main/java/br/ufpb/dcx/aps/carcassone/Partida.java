@@ -7,19 +7,41 @@ public class Partida {
 
 	private BolsaDeTiles tiles;
 	private Tile proximoTile;
+	private boolean tilePosicionado;
 	private TabuleiroFlexivel tabuleiro = new TabuleiroFlexivel("  ");
+	private String status ="Em_Andamento";
+	private String statusTurno= "Tile_Posicionado";
+	private Jogador[] jogadores;
+	private Jogador jogadorAtual;
 
-	Partida(BolsaDeTiles tiles) {
+	Partida(BolsaDeTiles tiles,Jogador[] jogadores) {
 		this.tiles = tiles;
+		this.jogadores=jogadores;
 		pegarProximoTile();
+		jogadorAtual=jogadores[0];
+	}
+	public String getStatus(){
+		return this.status;
+	}
+	public String toStringJogadores(){
+		String texto="";
+		for(int x=0;x<jogadores.length;x++){
+			if(x==jogadores.length-1){
+				texto+= jogadores[x].toString();
+			}else{
+				texto+=(jogadores[x].toString()+"; ");
+			}		
+		}
+		return texto;
+		
 	}
 
 	public String relatorioPartida() {
-		return null;
+		return "Status: " + status + "\nJogadores: " +toStringJogadores();
 	}
 
 	public String relatorioTurno() {
-		return null;
+		return "Jogador: " + jogadorAtual.getCor() + "\nTile: " + proximoTile.toString() + "\nStatus: " + statusTurno;
 	}
 
 	public Partida girarTile() {
@@ -75,6 +97,6 @@ public class Partida {
 	}
 
 	public String relatorioTabuleiro() {
-		return null;
+		return proximoTile.toString();
 	}
 }
