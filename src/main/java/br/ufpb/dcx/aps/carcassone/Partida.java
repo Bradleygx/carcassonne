@@ -13,6 +13,7 @@ public class Partida {
 	private String status ="Em_Andamento";
 	private String status2 ="Partida_Finalizada";
 	private String statusTurno= "Tile_Posicionado";
+	private int count;
 	boolean partidaAcabou;
 	private Jogador[] jogadores;
 	private Jogador jogadorAtual;
@@ -54,11 +55,15 @@ public class Partida {
 	}
 
 	public Partida girarTile() {
+		if(count==1){
+			throw new ExcecaoJogo("Não pode girar tile já posicionado");
+		}
 		proximoTile.girar();
 		return this;
 	}
 
 	private void pegarProximoTile() {
+		count++;
 		tileAnterior=proximoTile;
 		proximoTile = tiles.pegar();
 		if(proximoTile!=null){
@@ -71,6 +76,8 @@ public class Partida {
 
 	public Partida finalizarTurno() {
 		pegarProximoTile();
+		statusTurno="Início_Turno";
+		jogadorAtual=jogadores[(count-1)%jogadores.length];
 		return this;
 	}
 
@@ -115,6 +122,10 @@ public class Partida {
 		if(proximoTile==null){
 			return tileAnterior.toString();
 		}
-		return proximoTile.toString();
+		if(tilePosicionado){
+			return proximoTile.toString(); //quando o tile foi posicionado 
+		}
+		return tileAnterior.toString();
+
 	}
 }
