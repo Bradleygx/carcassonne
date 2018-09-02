@@ -7,6 +7,7 @@ public class Jogo {
 			throw new ExcecaoJogo("A bolsa de tiles deve ser fornecida na criação de uma partida");
 		}
 		
+		
 		if(sequencia.length < 2) {
 			throw new ExcecaoJogo("Cada partida deve ter uma sequência de pelo menos dois jogadores");
 		}
