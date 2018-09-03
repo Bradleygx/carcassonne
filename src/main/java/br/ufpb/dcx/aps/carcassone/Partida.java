@@ -1,108 +1,39 @@
 package br.ufpb.dcx.aps.carcassone;
 
-import br.ufpb.dcx.aps.carcassone.tabuleiro.TabuleiroFlexivel;
 import br.ufpb.dcx.aps.carcassone.tabuleiro.Tile;
 
 public class Partida {
 
-	private BolsaDeTiles tiles;
-	private Tile proximoTile;
-	private Tile tileAnterior;
-	private String statusTabuleiro;
-	private boolean tilePosicionado;
-	private TabuleiroFlexivel tabuleiro = new TabuleiroFlexivel("  ");
-	private String status ="Em_Andamento";
-	private String status2 ="Partida_Finalizada";
-	private String statusTurno= "Tile_Posicionado";
-	private int count;
-	boolean partidaAcabou;
-	private Jogador[] jogadores;
-	private Jogador jogadorAtual;
+	private GerentePartida gerente;
 
-	Partida(BolsaDeTiles tiles,Jogador[] jogadores) {
-		this.tiles = tiles;
-		this.statusTabuleiro="";
-		this.jogadores=jogadores;
-		pegarProximoTile();
-		jogadorAtual=jogadores[0];
-	}
-	public String getStatus(){
-		return this.status;
+	Partida(BolsaDeTiles tiles,Cor[] cores) {
+		gerente=new GerentePartida(tiles,cores);
 	}
 	public String toStringJogadores(){
-		String texto="";
-		for(int x=0;x<jogadores.length;x++){
-			if(x==jogadores.length-1){
-				texto+= jogadores[x].toString();
-			}else{
-				texto+=(jogadores[x].toString()+"; ");
-			}		
-		}
-		return texto;
+		return gerente.toStringJogadores();
 		
 	}
 
 	public String relatorioPartida() {
-		if(!partidaAcabou){
-			return "Status: " + status + "\nJogadores: " +toStringJogadores();
-		}
-		return "Status: " + status2 + "\nJogadores: " +toStringJogadores();
+		return gerente.relatorioPartida();
 	}
 
 	public String relatorioTurno() {
-		if(partidaAcabou){
-			throw new ExcecaoJogo("Partida finalizada");
-		}
-		if(tilePosicionado){
-			statusTurno="Tile_Posicionado";
-		}
-		return "Jogador: " + jogadorAtual.getCor() + "\nTile: " + proximoTile.toString() + "\nStatus: " + statusTurno;
+		return gerente.relatorioTurno();
 	}
 
 	public Partida girarTile() {
-		if(tilePosicionado){
-			throw new ExcecaoJogo("Não pode girar tile já posicionado");
-		}
-		if(partidaAcabou){
-			throw new ExcecaoJogo("Não pode girar tiles com a partida finalizada");
-		}
-		if(count==1){
-			throw new ExcecaoJogo("Não pode girar tile já posicionado");
-		}
-		proximoTile.girar();
+		gerente.girarTile();
 		return this;
 	}
 
-	private void pegarProximoTile() {
-		count++;
-		tileAnterior=proximoTile;
-		proximoTile = tiles.pegar();
-		if(proximoTile!=null){
-			proximoTile.reset();
-		}
-		else{
-			partidaAcabou=true;
-		}
-		if(count==1){
-			tabuleiro.adicionarPrimeiroTile(proximoTile);
-			tilePosicionado=true;
-		}
-	}
-
 	public Partida finalizarTurno() {
-		tilePosicionado=false;
-		pegarProximoTile();
-		statusTurno="Início_Turno";
-		jogadorAtual=jogadores[(count-1)%jogadores.length];
+		gerente.finalizarTurno();
 		return this;
 	}
 
 	public Partida posicionarTile(Tile tileReferencia, Lado ladoTileReferencia) {
-		if(tilePosicionado){
-			throw new ExcecaoJogo("Não pode reposicionar tile já posicionado");
-		}
-		tabuleiro.posicionar(tileReferencia, ladoTileReferencia, proximoTile);
-		tilePosicionado=true;
+		gerente.posicionarTile(tileReferencia, ladoTileReferencia);
 		return this;
 	}
 
@@ -139,7 +70,7 @@ public class Partida {
 	}
 
 	public String relatorioTabuleiro() {
-		return tabuleiro.toString();
+		return gerente.relatorioTabuleiro();
 
 	}
 }

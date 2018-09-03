@@ -19,14 +19,10 @@ public class Jogo {
 				}
 			}
 		}
-		Jogador jogadores[]=new Jogador[sequencia.length];
-		for(int x=0;x < sequencia.length; x++){
-			
-			jogadores[x]=new Jogador(sequencia[x]);
-		}
 		
 		
-		return new Partida(tiles,jogadores);
+		
+		return new Partida(tiles,sequencia);
 	}
 
 
