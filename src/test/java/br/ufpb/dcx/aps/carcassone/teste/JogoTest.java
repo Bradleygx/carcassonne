@@ -634,6 +634,73 @@ public class JogoTest {
 
 		Assert.assertEquals(partida.getQuantCampos(),2);
 	}
+	@Test
+	public void juntarCamposPeloLeste() {
+		mockarTiles(tiles,t30,t64);
+		printaLadosTile(t64);
+		Partida partida = jogo.criarPartida(tiles, VERDE,PRETO);
+		partida.finalizarTurno();
+		girar(partida,3);
+		printaLadosTile(t64);
+		partida.posicionarTile(t30, LESTE);
+		System.out.println(partida.relatorioTabuleiro());
+		Assert.assertEquals(partida.getCampos(),"30(NO,NE) 64(NO,NE)\n30(SO,SE) 64(SO,SE)");
+		
+	}
+	@Test
+	public void juntarCamposPeloNorte() {
+		mockarTiles(tiles,t30,t64,t19);
+		printaLadosTile(t19);
+		Partida partida = jogo.criarPartida(tiles, VERDE,PRETO);
+		partida.finalizarTurno();
+		girar(partida,1);
+		partida.posicionarTile(t30, LESTE);
+		partida.finalizarTurno();
+		partida.posicionarTile(t64, NORTE);
+		System.out.println(partida.relatorioTabuleiro());
+		Assert.assertEquals(partida.getCampos(),"19(NO,NE,SO,SE) 30(NO,NE) 64(NO,NE)\n30(SO,SE) 64(SO,SE)");
+		
+	}
+	@Test
+	public void juntarCamposOeste() {
+		mockarTiles(tiles,t30,t64);
+		printaLadosTile(t64);
+		Partida partida = jogo.criarPartida(tiles, VERDE,PRETO);
+		partida.finalizarTurno();
+		girar(partida,3);
+		printaLadosTile(t64);
+		partida.posicionarTile(t30, OESTE);
+		System.out.println(partida.relatorioTabuleiro());
+		Assert.assertEquals(partida.getCampos(),"64(NO,NE) 30(NO,NE)\n64(SO,SE) 30(SO,SE)");
+		
+	}
+	@Test
+	public void juntarCamposPeloSul() {
+		mockarTiles(tiles,t30,t64);
+		printaLadosTile(t64);
+		Partida partida = jogo.criarPartida(tiles, VERDE,PRETO);
+		partida.finalizarTurno();
+		girar(partida,1);
+		printaLadosTile(t64);
+		partida.posicionarTile(t30, SUL);
+		System.out.println(partida.relatorioTabuleiro());
+		Assert.assertEquals(partida.getCampos(),"30(NO,NE)\n30(SO,SE) 64(NO,NE)\n64(SO,SE)");
+		
+	}
+	@Test
+	public void juntaDoisCampos() {
+		mockarTiles(tiles,t30,t50);
+		printaLadosTile(t50);
+		Partida partida = jogo.criarPartida(tiles, VERDE,PRETO);
+		partida.finalizarTurno();
+		girar(partida,1);
+		printaLadosTile(t50);
+		partida.posicionarTile(t30, LESTE);
+		System.out.println(partida.relatorioTabuleiro());
+		Assert.assertEquals(partida.getCampos(),"30(NO,NE) 30(SO,SE) 50(NO,NE,SO,SE)");
+		Assert.assertEquals(partida.getQuantCampos(),1);
+		
+	}
 
 	private void printaLadosTile (Tile t) {
 		System.out.println("N "+t.getLadoNorte()+" L "+t.getLadoLeste()+" S "+t.getLadoSul()+" O "+t.getLadoOeste());
