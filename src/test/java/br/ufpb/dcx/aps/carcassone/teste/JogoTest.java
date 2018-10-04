@@ -757,6 +757,55 @@ public class JogoTest {
 		ocorreExcecaoJogo(() -> partida.posicionarMeepleCampo(NORDESTE),"Apenas um meeple pode ser adicionado por turno.");
 		partida.finalizarTurno();
 	}
+	
+@Test
+public void juntarTresCampos() {
+	
+}
+	@Test
+public void tabuleiroComUmCampoTile() {
+	mockarTiles(tiles, t30);
+	Partida partida = jogo.criarPartida(tiles, VERDE, PRETO, AMARELO, VERMELHO, AZUL);
+	Assert.assertEquals("30(NO,NE)\n30(SO,SE)", partida.getCampos());
+	partida.posicionarMeepleCampo(NORDESTE);
+	Assert.assertEquals("30(NO-VERDE,NE)\n30(SO,SE)", partida.getCampos());
+	
+
+}
+@Test
+public void tabuleiroComDoisCamposTile() {
+	mockarTiles(tiles, t30,t02);
+	Partida partida = jogo.criarPartida(tiles, VERDE, PRETO, AMARELO, VERMELHO, AZUL);
+	Assert.assertEquals("30(NO,NE)\n30(SO,SE)", partida.getCampos());
+	partida.posicionarMeepleCampo(NORDESTE);
+	Assert.assertEquals("30(NO-VERDE,NE)\n30(SO,SE)", partida.getCampos());
+	partida.finalizarTurno();
+	girar(partida,2);
+	partida.posicionarTile(t30, SUL);
+	partida.posicionarMeepleCampo(NOROESTE);
+	Assert.assertEquals("30(NO-VERDE,NE)\n30(SO,SE) 02(NO-PRETO,NE)", partida.getCampos());
+	
+
+}
+@Test
+public void tabuleiroComTresCamposTile() {
+	mockarTiles(tiles, t30,t02,t72);
+	Partida partida = jogo.criarPartida(tiles, VERDE, PRETO, AMARELO, VERMELHO, AZUL);
+	Assert.assertEquals("30(NO,NE)\n30(SO,SE)", partida.getCampos());
+	partida.posicionarMeepleCampo(NORDESTE);
+	Assert.assertEquals("30(NO-VERDE,NE)\n30(SO,SE)", partida.getCampos());
+	partida.finalizarTurno();
+	girar(partida,2);
+	partida.posicionarTile(t30, SUL);
+	partida.posicionarMeepleCampo(NOROESTE);
+	Assert.assertEquals("30(NO-VERDE,NE)\n30(SO,SE) 02(NO-PRETO,NE)", partida.getCampos());
+	partida.finalizarTurno();
+	partida.posicionarTile(t30, LESTE);
+	partida.posicionarMeepleCampo(NORDESTE);
+	Assert.assertEquals("30(NO-VERDE,NE) 72(NO)\n 72(NE-AMARELO)\n30(SO,SE) 72(SO) 02(NO-PRETO,NE)\n72(SE)", partida.getCampos());
+
+}
+
 
 
 	private void printaLadosTile (Tile t) {
