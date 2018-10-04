@@ -506,6 +506,7 @@ public class JogoTest {
 	public void posicionarMeepleCampoSemCampo() {
 		mockarTiles(tiles, t30, t02);
 		Partida partida = jogo.criarPartida(tiles, AMARELO, VERMELHO);
+		partida.finalizarTurno();
 		girar(partida, 2);
 		partida.posicionarTile(t30, SUL);
 
@@ -543,6 +544,7 @@ public class JogoTest {
 	public void campoComDoisTilesMeeple() {
 		mockarTiles(tiles, t30, t02);
 		Partida partida = jogo.criarPartida(tiles, AMARELO, VERMELHO);
+		partida.finalizarTurno();
 		girar(partida, 2);
 
 		partida.posicionarTile(t30, SUL);
@@ -564,20 +566,78 @@ public class JogoTest {
 	public void campoComTresTilesMeeple() {
 		mockarTiles(tiles, t30, t02, t51);
 		Partida partida = jogo.criarPartida(tiles, AMARELO, VERMELHO);
+		partida.finalizarTurno();
 		girar(partida, 2);
 		partida.posicionarTile(t30, SUL);
 		partida.finalizarTurno();
-
+		
 		partida.posicionarTile(t30, LESTE);
-		Assert.assertEquals("30(NO,NE) 51(NO,NE,SE)\n30(SO,SE) 02(NO,NE) 51(SO)", partida.getCampos());
+		printaLadosTile(t02);
+		printaLadosTile(t51);
+		Assert.assertEquals("30(NO,NE) 51(NO,NE,SE)\n30(SO,SE) 51(SO) 02(NO,NE)", partida.getCampos());
 
 		partida.posicionarMeepleCampo(SUDESTE);
-		Assert.assertEquals("30(NO,NE) 51(NO,NE,SE-VERMELHO)\n30(SO,SE) 02(NO,NE) 51(SO)", partida.getCampos());
+		Assert.assertEquals("30(NO,NE) 51(NO,NE,SE-VERMELHO)\n30(SO,SE) 51(SO) 02(NO,NE)", partida.getCampos());
 
 		partida.finalizarTurno();
-		Assert.assertEquals("30(NO,NE) 51(NO,NE,SE-VERMELHO)\n30(SO,SE) 02(NO,NE) 51(SO)", partida.getCampos());
+		Assert.assertEquals("30(NO,NE) 51(NO,NE,SE-VERMELHO)\n30(SO,SE) 51(SO) 02(NO,NE)", partida.getCampos());
 	}
-	
+	@Test
+	public void juntarCamposDeEstradas() {
+		mockarTiles(tiles, t30, t29);
+		Partida partida = jogo.criarPartida(tiles, VERDE, PRETO);
+		partida.finalizarTurno();
+		
+		partida.posicionarTile(t30, LESTE);
+
+		Assert.assertEquals(partida.getQuantCampos(),2);
+	}
+	@Test
+	public void juntarCamposDeCampos() {
+		mockarTiles(tiles, t30, t19);
+		Partida partida = jogo.criarPartida(tiles, VERDE, PRETO);
+		partida.finalizarTurno();
+		girar(partida,3);
+		partida.posicionarTile(t30, SUL);
+
+		Assert.assertEquals(partida.getQuantCampos(),2);
+	}
+	@Test
+	public void juntarCamposDeEstradaComMosteiro() {
+		mockarTiles(tiles, t30, t49);
+		Partida partida = jogo.criarPartida(tiles, VERDE, PRETO);
+		System.out.println(t49.getLadoOeste());
+		partida.finalizarTurno();
+		girar(partida,1);
+		System.out.println(t49.getLadoOeste());
+		partida.posicionarTile(t30, LESTE);
+
+		Assert.assertEquals(partida.getQuantCampos(),1);
+	}
+	@Test
+	public void juntarCamposDeCidadesSeparadas() {
+		mockarTiles(tiles, t30, t11);
+		Partida partida = jogo.criarPartida(tiles, VERDE, PRETO);
+		partida.finalizarTurno();
+		girar(partida,1);
+		partida.posicionarTile(t30, SUL);
+
+		Assert.assertEquals(partida.getQuantCampos(),2);
+	}
+	@Test
+	public void verificaDoisCampos() {
+		mockarTiles(tiles, t30, t11);
+		Partida partida = jogo.criarPartida(tiles, VERDE, PRETO);
+		partida.finalizarTurno();
+		girar(partida,1);
+		partida.posicionarTile(t30, SUL);
+
+		Assert.assertEquals(partida.getQuantCampos(),2);
+	}
+
+	private void printaLadosTile (Tile t) {
+		System.out.println("N "+t.getLadoNorte()+" L "+t.getLadoLeste()+" S "+t.getLadoSul()+" O "+t.getLadoOeste());
+	}
 	private void girar(Partida partida, int quantidade) {
 		for (int i = 0; i < quantidade; i++) {
 			partida.girarTile();

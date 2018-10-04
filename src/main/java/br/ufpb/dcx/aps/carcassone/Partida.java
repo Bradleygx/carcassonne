@@ -73,4 +73,8 @@ public class Partida {
 		return gerente.relatorioTabuleiro();
 
 	}
+	public int getQuantCampos() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }
