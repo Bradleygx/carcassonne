@@ -805,7 +805,54 @@ public void tabuleiroComTresCamposTile() {
 	Assert.assertEquals("30(NO-VERDE,NE) 72(NO)\n 72(NE-AMARELO)\n30(SO,SE) 72(SO) 02(NO-PRETO,NE)\n72(SE)", partida.getCampos());
 
 }
+@Test
+public void tabuleiroComQuatroCamposTile() {
+	mockarTiles(tiles, t30,t02,t72,t64);
+	Partida partida = jogo.criarPartida(tiles, VERDE, PRETO, AMARELO, VERMELHO, AZUL);
+	Assert.assertEquals("30(NO,NE)\n30(SO,SE)", partida.getCampos());
+	partida.posicionarMeepleCampo(NORDESTE);
+	Assert.assertEquals("30(NO-VERDE,NE)\n30(SO,SE)", partida.getCampos());
+	partida.finalizarTurno();
+	girar(partida,2);
+	partida.posicionarTile(t30, SUL);
+	partida.posicionarMeepleCampo(NOROESTE);
+	Assert.assertEquals("30(NO-VERDE,NE)\n30(SO,SE) 02(NO-PRETO,NE)", partida.getCampos());
+	partida.finalizarTurno();
+	partida.posicionarTile(t30, LESTE);
+	partida.posicionarMeepleCampo(NORDESTE);
+	Assert.assertEquals("30(NO-VERDE,NE) 72(NO)\n 72(NE-AMARELO)\n30(SO,SE) 72(SO) 02(NO-PRETO,NE)\n72(SE)", partida.getCampos());
+	partida.finalizarTurno();
+	partida.posicionarTile(t72, SUL);
+	partida.posicionarMeepleCampo(SUDESTE);
+	Assert.assertEquals("30(NO-VERDE,NE) 72(NO)\n 72(NE-AMARELO)\n30(SO,SE) 72(SO) 02(NO-PRETO,NE) 64(NO,SO)\n72(SE) 64(NE,SE)", partida.getCampos());
+}
+@Test
+public void campoCircular(){
+	mockarTiles(tiles, t30,t64,t34,t35,t32,t33);
+	Partida partida = jogo.criarPartida(tiles, VERDE, PRETO, AMARELO, VERMELHO, AZUL);
+	Assert.assertEquals("30(NO,NE)\n30(SO,SE)", partida.getCampos());
+	partida.finalizarTurno();
+	girar(partida, 1);
+	partida.posicionarTile(t30, SUL);
+	Assert.assertEquals("30(NO,NE)\n30(SO,SE) 64(NO,NE)\n64(SO,SE)", partida.getCampos());
+	partida.finalizarTurno();
+	partida.posicionarTile(t30, OESTE);
+	Assert.assertEquals("34(NE,SO) 30(NO,NE)\n34(SE) 30(SO,SE) 64(NO,NE)\n64(SO,SE)", partida.getCampos());
+	partida.finalizarTurno();
+	girar(partida,1);
+	partida.posicionarTile(t30, LESTE);
+	Assert.assertEquals("34(NE,SO) 30(NO,NE) 35(NO,SE)\n34(SE) 30(SO,SE) 35(SO) 64(NO,NE)\n64(SO,SE)", partida.getCampos());
+	partida.finalizarTurno();
+	girar(partida,3);
+	partida.posicionarTile(t34, SUL);
+	Assert.assertEquals("34(NE,SO) 30(NO,NE) 35(NO,SE) 32(NO,SE) 64(SO,SE)\n34(SE) 30(SO,SE) 35(SO) 32(NE) 64(NO,NE)", partida.getCampos());
+	partida.finalizarTurno();
+	girar(partida,2);
+	partida.posicionarTile(t64, LESTE);
+	Assert.assertEquals("34(NE,SO) 30(NO,NE) 35(NO,SE) 32(NO,SE) 64(SO,SE) 33(NO,SE)\n34(SE) 30(SO,SE) 35(SO) 32(NE) 64(NO,NE) 33(NO)", partida.getCampos());
 
+}
+	
 
 
 	private void printaLadosTile (Tile t) {
