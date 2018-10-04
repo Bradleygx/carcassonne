@@ -701,6 +701,63 @@ public class JogoTest {
 		Assert.assertEquals(partida.getQuantCampos(),1);
 		
 	}
+	@Test
+	public void tabuleiroComUmCampo() {
+		mockarTiles(tiles,t30,t50);
+		printaLadosTile(t50);
+		Partida partida = jogo.criarPartida(tiles, VERDE,PRETO);
+		partida.finalizarTurno();
+		girar(partida,1);
+		printaLadosTile(t50);
+		partida.posicionarTile(t30, LESTE);
+		System.out.println(partida.relatorioTabuleiro());
+		Assert.assertEquals(partida.getQuantCampos(),1);
+	}
+	@Test
+	public void tabuleiroComDoisCampos() {
+		mockarTiles(tiles,t30,t29);
+		printaLadosTile(t29);
+		Partida partida = jogo.criarPartida(tiles, VERDE,PRETO);
+		partida.finalizarTurno();
+		partida.posicionarTile(t30, LESTE);
+		System.out.println(partida.relatorioTabuleiro());
+		Assert.assertEquals(partida.getQuantCampos(),2);
+	}
+	@Test
+	public void tabuleiroComTresCampos() {
+		mockarTiles(tiles,t30,t60);
+		printaLadosTile(t60);
+		Partida partida = jogo.criarPartida(tiles, VERDE,PRETO);
+		partida.finalizarTurno();
+		partida.posicionarTile(t30, LESTE);
+		System.out.println(partida.relatorioTabuleiro());
+		Assert.assertEquals(partida.getQuantCampos(),3);
+	}
+	@Test
+	public void tabuleiroComQuatroCampos() {
+		mockarTiles(tiles,t30,t72);
+		printaLadosTile(t72);
+		Partida partida = jogo.criarPartida(tiles, VERDE,PRETO);
+		partida.finalizarTurno();
+		partida.posicionarTile(t30, LESTE);
+		System.out.println(partida.relatorioTabuleiro());
+		Assert.assertEquals(partida.getQuantCampos(),4);
+	}
+	@Test
+	public void adicionarMeepleDuasVezes() {
+		mockarTiles(tiles, t30, t02);
+		Partida partida = jogo.criarPartida(tiles, AMARELO, VERMELHO);
+		partida.finalizarTurno();
+		girar(partida, 2);
+
+		partida.posicionarTile(t30, SUL);
+		Assert.assertEquals("30(NO,NE)\n30(SO,SE) 02(NO,NE)", partida.getCampos());
+
+		partida.posicionarMeepleCampo(NORDESTE);
+		ocorreExcecaoJogo(() -> partida.posicionarMeepleCampo(NORDESTE),"Apenas um meeple pode ser adicionado por turno.");
+		partida.finalizarTurno();
+	}
+
 
 	private void printaLadosTile (Tile t) {
 		System.out.println("N "+t.getLadoNorte()+" L "+t.getLadoLeste()+" S "+t.getLadoSul()+" O "+t.getLadoOeste());
